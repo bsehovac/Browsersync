@@ -6,6 +6,7 @@ const getPath = document.querySelector('#getPath');
 const urlInput = document.querySelector('#url');
 const typeInput = document.querySelector('#type');
 const toggle = document.querySelector('#toggle');
+const ipField = document.querySelector('#ip');
 
 (function() {
   pathInput.value = localStorage.getItem('path');
@@ -101,8 +102,15 @@ getPath.onclick = function() {
 ipcRenderer.on('server-reply', function(event, status) {
   if (status === 'started') {
     toggle.classList.add('active');
+    ipcRenderer.send('get-ip');
   } else if (status === 'stopped') {
     toggle.classList.remove('active');
   }
   canSwitch = true;
 });
+
+ipcRenderer.on('return-ip', function(event, ip) {
+  if (ip) ipField.innerHTML = ip + ':3000';
+});
+
+ipcRenderer.send('get-ip');

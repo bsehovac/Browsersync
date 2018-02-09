@@ -2,6 +2,9 @@ const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
+const os = require('os');
+const interfaces = os.networkInterfaces();
+
 const bs = require('browser-sync').create();
 
 const path = require('path');
@@ -58,8 +61,8 @@ ipcMain.on('server-start', function(event, options) {
       files: options.files,
       logPrefix: '',
       port: 3000,
-      reloadOnRestart: true,
-      notify: true,
+      reloadOnRestart: false,
+      notify: false,
       open: 'local',
       https: false,
       ghostMode: false,
@@ -73,5 +76,16 @@ ipcMain.on('server-stop', function(event, options) {
   if (bs.active) {
     bs.exit();
     event.sender.send('server-reply', 'stopped');
+  }
+});
+
+ipcMain.on('get-ip', function(event) {
+  for (let k in interfaces) {
+    for (let k2 in interfaces[k]) {
+      let address = interfaces[k][k2];
+      if (address.family === 'IPv4' && !address.internal) {
+        event.sender.send('return-ip', address.address);
+      }
+    }
   }
 });

@@ -33,6 +33,14 @@ $placeholder: rgba($black, 0.5);
   padding: 2.5rem 0 2.5rem;
 }
 
+#ip {
+  position: absolute;
+  right: 2rem;
+  bottom: 1rem;
+  color: rgba($black, 0.2);
+  font-size: 1.2rem;
+}
+
 .label {
   text-align: center;
   margin-bottom: 1rem;
