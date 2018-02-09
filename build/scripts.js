@@ -1,80 +1,74 @@
 const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+ipcRenderer = require('electron').ipcRenderer;
 
-const bs = require('browser-sync').create();
+var pathInput = document.querySelector('#path');
+var pathButton = document.querySelector('#getPath');
+var urlInput = document.querySelector('#url');
+var typeInput = document.querySelector('#type');
+var watch = document.querySelector('#watch');
+var stop = document.querySelector('#stop');
 
-const path = require('path');
-const url = require('url');
+watch.onclick = function(e) {
+  e.preventDefault();
 
-let mainWindow;
+  let path  = pathInput.value.replace(/^\/|\/$/g, '');
+  let url   = urlInput.value;
+  let files = typeInput.value.split(',');
 
-function createWindow () {
-  mainWindow = new BrowserWindow({ width: 400, height: 300, titleBarStyle: 'hiddenInset' });
-
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
-
-  mainWindow.on('closed', function () {
-    mainWindow = null;
-  });
-}
-
-app.on('ready', createWindow);
-
-app.on('window-all-closed', function () {
-  if (bs.active) { bs.exit(); }
-  app.quit();
-});
-
-app.on('activate', function () {
-  if (mainWindow === null) {
-    createWindow();
+  if (path === '') {
+    pathInput.classList.add('error');
+    pathInput.onfocus = function() {
+      pathInput.classList.remove('error');
+    };
+    return;
   }
-});
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
-const ipcMain = electron.ipcMain;
-const dialog = electron.dialog;
-
-ipcMain.on('select-directory', function(event) {
-  dialog.showOpenDialog(mainWindow, {
-    properties: ['openDirectory']
-  }, function(dirname) {
-    event.sender.send('return-directory', dirname);
-  });
-});
-
-ipcMain.on('server-start', function(event, options) {
-  if (!bs.active && options.command == 'start') {
-    bs.init({
-      proxy: options.url,
-      browser: options.browser,
-      files: options.files,
-      logPrefix: '',
-      reloadOnRestart: true,
-      notify: true,
-      open: 'external',
-      ghostMode: {
-        clicks: true,
-        location: false,
-        forms: true,
-        scroll: true
-      }
-    }, function(err, bs) {
-      event.sender.send('server-reply', 'started', 'Browsersync is running!', bs);
-    });
+  if (url === '') {
+    urlInput.classList.add('error');
+    urlInput.onfocus = function() {
+      urlInput.classList.remove('error');
+    };
+    return;
   }
+
+  let extensions = [];
+
+  for (let i = 0; i < files.length; i++) {
+    let file = files[i].trim();
+    if (file !== '') 
+      extensions.push('/'+ path + '/**/*.'+ file);
+  }
+
+  if (extensions == '') extensions.push('/'+ path + '/**/*.*');
+
+  let options = {};
+  options.url = url;
+  options.command = 'start';
+  options.browser = 'google chrome'; // safari firefox
+  options.files = extensions;
+
+  ipcRenderer.send('server-start', options);
+};
+
+stop.onclick = function(e) {
+  e.preventDefault();
+
+  ipcRenderer.send('server-stop');
+};
+
+ipcRenderer.on('return-directory', function(event, dirname) {
+  var path = dirname[0];
+  pathInput.value = path;
 });
 
-ipcMain.on('server-stop', function(event, options) {
-  if (bs.active) {
-    bs.exit();
-    event.sender.send('server-reply', 'stopped', 'Browsersync is stopped!!', bs);
+pathButton.onclick = function() {
+  ipcRenderer.send('select-directory', function(){});
+};
+
+ipcRenderer.on('server-reply', function(status, message, bs) {
+  if (status === 'started') {
+    console.log(message);
+  } else if (status === 'stopped') {
+    console.log(message);
   }
 });
