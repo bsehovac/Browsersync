@@ -1,0 +1,20 @@
+{
+  "name": "browsersync",
+  "version": "1.0.0",
+  "description": "Browsersync",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "",
+  "keywords": [
+    "Electron",
+    "Browsersync",
+    "GUI"
+  ],
+  "author": "bsehovac.github.io",
+  "license": "",
+  "devDependencies": {
+    "electron": "~1.7.8"
+  }
+}

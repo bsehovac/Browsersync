@@ -1,0 +1,29 @@
+$background: #fff;
+
+$font-color: #102635;
+$font-family: Titillium Web, Lucida Grande, Lucida Sans, sans-serif;
+$font-size: 1.6rem;
+$font-weight: normal;
+$line-height: 1.2;
+
+$red: #f14745;
+$black: #102635;
+
+$placeholder: rgba($font-color, 0.5);
+
+@import 'mixins';
+@import 'reset';
+
+#titlebar {
+  -webkit-app-region: drag;
+  background-image: url(img/_logo.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10rem auto;
+  height: 3.4rem;
+}
+
+input {
+  display: block;
+  width: 100%;
+}

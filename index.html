@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Browsersync</title>
+    <link rel="stylesheet"  href="build/styles.css" type="text/css" media="all" />
+  </head>
+  <body>
+    <div id="titlebar"></div>
+    <div id="window">
+      <div class="input-field">
+        <input type="text" id="path" placeholder="path" value="/Applications/MAMP/Localhost/rox.com/wp-content/themes/rox">
+        <button id="getPath">Path</button>
+      </div>
+      <div class="input-field">
+        <input type="text" id="url" placeholder="url" value="http://rox.com/">
+      </div>
+      <div class="input-field">
+        <input type="text" id="type" placeholder="js, css" value="css">
+      </div>
+      <button id="watch">Watch</button>
+      <button id="stop">Stop</button>
+    </div>
+    <script>
+      // You can also require other files to run in this process
+      require('./build/scripts.js');
+    </script>
+  </body>
+</html>
