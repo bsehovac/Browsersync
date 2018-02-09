@@ -27,3 +27,36 @@ input {
   display: block;
   width: 100%;
 }
+
+#toggle {
+  $width: 2.4rem;
+  $button: 1.2;
+
+  left: 2rem;
+  top: 2rem;
+  width: $width * 2;
+  height: $width;
+  border-radius: $width;
+  background: $red;
+  transition: background 400ms ease;
+
+  span {
+    position: absolute;
+    left: -$width * ($button - 1) / 2;
+    top: -$width * ($button - 1) / 2;
+    height: $width * $button;
+    width: $width * $button;
+    border-radius: $width * $button;
+    background: $background;
+    box-shadow: $width/10 $width/5 $width rgba(0, 0, 0, 0.2);
+    transition: left 400ms ease;
+  } 
+
+  &.active {
+    background: #22ee22;
+
+    span {
+      left: $width - $width * ($button - 1) / 2;
+    }
+  }
+}

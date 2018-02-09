@@ -1,12 +1,24 @@
 const electron = require('electron');
 ipcRenderer = require('electron').ipcRenderer;
 
-var pathInput = document.querySelector('#path');
-var pathButton = document.querySelector('#getPath');
-var urlInput = document.querySelector('#url');
-var typeInput = document.querySelector('#type');
-var watch = document.querySelector('#watch');
-var stop = document.querySelector('#stop');
+const pathInput = document.querySelector('#path');
+const pathButton = document.querySelector('#getPath');
+const urlInput = document.querySelector('#url');
+const typeInput = document.querySelector('#type');
+const watch = document.querySelector('#watch');
+const stop = document.querySelector('#stop');
+const toggle = document.querySelector('#toggle');
+
+let active = false;
+
+toggle.onclick = function() {
+  active = !active;
+  if (active) {
+    toggle.classList.add('active');
+  } else {
+    toggle.classList.remove('active');
+  }
+}
 
 watch.onclick = function(e) {
   e.preventDefault();
