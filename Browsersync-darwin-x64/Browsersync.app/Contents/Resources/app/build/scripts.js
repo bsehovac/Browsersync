@@ -1,5 +1,5 @@
 const electron = require('electron');
-ipcRenderer = require('electron').ipcRenderer;
+const ipcRenderer = electron.ipcRenderer;
 
 const pathInput = document.querySelector('#path');
 const getPath = document.querySelector('#getPath');
