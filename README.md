@@ -11,4 +11,4 @@ GUI for Browsersync
 
 ## Screenshot
 
-![Screenshot](https://raw.githubusercontent.com/bsehovac/Browsersync/master/screenshot.png?v=2)
+![Screenshot](https://raw.githubusercontent.com/bsehovac/Browsersync/master/screenshot.png?v=3)
