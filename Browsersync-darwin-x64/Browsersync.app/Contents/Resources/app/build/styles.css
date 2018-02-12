@@ -59,8 +59,7 @@ html {
 
 body {
   width: 100%;
-  min-height: 100%;
-  background: #fff;
+  height: 100%;
   color: #102635;
   font-family: Titillium, sans-serif;
   font-size: 1.6rem;
@@ -75,12 +74,13 @@ body {
   background: transparent;*/ }
 
 #titlebar {
+  -webkit-user-select: none;
   -webkit-app-region: drag;
-  height: 6rem;
+  height: 8rem;
   text-align: center; }
   #titlebar svg {
-    height: 4rem;
-    margin-top: 2rem;
+    height: 4.5rem;
+    margin-top: 3rem;
     display: inline-block;
     vertical-align: top; }
 
@@ -95,21 +95,28 @@ body {
   font-size: 1.2rem; }
 
 .label {
-  text-align: center;
-  margin-bottom: 1rem; }
+  text-align: left;
+  margin-bottom: 1rem;
+  padding: 0 2rem; }
 
 .input-field {
-  width: 100%;
-  background: rgba(16, 38, 53, 0.03);
+  width: 95%;
+  margin: 0 auto;
   margin-bottom: 1rem;
-  transition: background 350ms ease; }
+  background: rgba(16, 38, 53, 0.08);
+  transition: background 350ms ease;
+  height: 4.6rem;
+  border-radius: 0.5rem;
+  overflow: hidden; }
   .input-field.error {
     background: rgba(242, 71, 71, 0.1); }
+  .input-field.button {
+    padding-right: 4rem; }
   .input-field input {
     display: block;
     width: 100%;
-    line-height: 2rem;
-    padding: 1.3rem 2rem;
+    line-height: 2.6rem;
+    padding: 1rem 1.5rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -117,7 +124,7 @@ body {
     color: #102635; }
   .input-field button {
     position: absolute;
-    right: 2rem;
+    right: 1.5rem;
     height: 3rem;
     width: 2.5rem;
     top: 50%;
@@ -127,15 +134,47 @@ body {
       width: 100%;
       height: 100%; }
       .input-field button svg * {
-        stroke: rgba(16, 38, 53, 0.2);
-        stroke-width: 3000;
-        stroke-linecap: round;
-        fill: none;
-        transition: stroke 350ms ease; }
+        fill: rgba(255, 255, 255, 0.5);
+        transition: fill 350ms ease; }
     .input-field button:hover svg * {
-      stroke: #102635; }
-  .input-field.button {
-    padding-right: 3rem; }
+      fill: #f24747; }
+  .input-field.tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    height: auto;
+    min-height: 4.6rem;
+    padding: 0 0.9rem; }
+    .input-field.tags .taginput {
+      width: 0;
+      min-width: 3rem;
+      flex: 1 1 auto;
+      padding: 1rem 0.6rem; }
+    .input-field.tags span {
+      display: block;
+      vertical-align: middle;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 0.4rem;
+      padding: 0 0.6rem;
+      padding-right: 2rem;
+      line-height: 3rem;
+      height: 3rem;
+      margin-top: 0.75rem;
+      margin-right: 0.5rem;
+      width: auto;
+      transition: background 350ms ease, color 350ms ease; }
+      .input-field.tags span:hover {
+        background: #f24747;
+        color: #fff; }
+      .input-field.tags span:first-child {
+        margin-left: 0; }
+      .input-field.tags span:after {
+        content: 'X';
+        font-size: 1rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0.75rem; }
 
 input {
   display: block;
@@ -146,7 +185,7 @@ input {
   width: 5.28rem;
   height: 2.4rem;
   border-radius: 2.4rem;
-  background-color: #f24747;
+  background-color: rgba(16, 38, 53, 0.08);
   transition: background 350ms ease; }
   #toggle span {
     position: absolute;
@@ -162,3 +201,9 @@ input {
     background-color: #62d66a; }
     #toggle.active span {
       left: 2.64rem; }
+
+body {
+  transition: filter 350ms ease, opacity 350ms ease; }
+  body.blur {
+    opacity: 0.5;
+    filter: grayscale(1); }

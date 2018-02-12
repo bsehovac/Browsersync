@@ -17,13 +17,14 @@ $placeholder: rgba($black, 0.5);
 @import 'reset';
 
 #titlebar {
+  -webkit-user-select: none;
   -webkit-app-region: drag;
-  height: 6rem;
+  height: 8rem;
   text-align: center;
 
   svg {
-    height: 4rem;
-    margin-top: 2rem;
+    height: 4.5rem;
+    margin-top: 3rem;
     display: inline-block;
     vertical-align: top;
   }
@@ -42,25 +43,37 @@ $placeholder: rgba($black, 0.5);
 }
 
 .label {
-  text-align: center;
+  text-align: left;
   margin-bottom: 1rem;
+  padding: 0 2rem;
 }
 
 .input-field {
-  width: 100%;
-  background: rgba($gray, 0.03);
+  $shadow: 2.5rem;
+  $padding: 1.5rem;
+
+  width: 95%;
+  margin: 0 auto;
   margin-bottom: 1rem;
+  background: rgba($gray, 0.08);
   transition: background $transition;
+  height: 4.6rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
 
   &.error {
     background: rgba($red, 0.1);
   }
 
+  &.button {
+    padding-right: 4rem;
+  }
+
   input {
     display: block;
     width: 100%;
-    line-height: 2rem;
-    padding: 1.3rem 2rem;
+    line-height: 2.6rem;
+    padding: 1rem $padding;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -70,7 +83,7 @@ $placeholder: rgba($black, 0.5);
 
   button {
     position: absolute;
-    right: 2rem;
+    right: $padding;
     height: 3rem;
     width: 2.5rem;
     top: 50%;
@@ -82,23 +95,65 @@ $placeholder: rgba($black, 0.5);
       height: 100%;
 
       * {
-        stroke: rgba($gray, 0.2);
-        stroke-width: 3000;
-        stroke-linecap: round;
-        fill: none;
-        transition: stroke $transition;
+        fill: rgba($white, 0.5);
+        transition: fill $transition;
       }
     }
 
     &:hover {
       svg * {
-        stroke: $black;
+        fill: $red;
       }
     }
   }
 
-  &.button {
-    padding-right: 3rem;
+  &.tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    height: auto;
+    min-height: 4.6rem;
+    padding: 0 $padding * 0.6;
+
+    .taginput {
+      width: 0;
+      min-width: 3rem;
+      flex: 1 1 auto;
+      padding: 1rem $padding * 0.4;
+    }
+
+    span {
+      display: block;
+      vertical-align: middle;
+      background: rgba($white, 0.5);
+      border-radius: 0.4rem;
+      padding: 0 $padding * 0.4;
+      padding-right: 2rem;
+      line-height: 3rem;
+      height: 3rem;
+      margin-top: 0.75rem;
+      margin-right: 0.5rem;
+      width: auto;
+      transition: background $transition, color $transition;
+
+      &:hover {
+        background: $red;
+        color: $white;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:after {
+        content: 'X';
+        font-size: 1rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0.75rem;
+      }
+    }
   }
 }
 
@@ -116,7 +171,7 @@ input {
   width: $size * $width;
   height: $size;
   border-radius: $size;
-  background-color: $red;
+  background-color: rgba($gray, 0.08);
   transition: background $transition;
 
   span {
@@ -137,5 +192,14 @@ input {
     span {
       left: $size * ($width - 1) - $size * ($scale - 1) / 2;
     }
+  }
+}
+
+body {
+  transition: filter $transition, opacity $transition;
+
+  &.blur {
+    opacity: 0.5;
+    filter: grayscale(1);
   }
 }

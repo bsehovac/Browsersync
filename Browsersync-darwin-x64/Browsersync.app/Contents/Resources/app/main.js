@@ -1,9 +1,15 @@
+/*jshint esversion: 6 */
+
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
 const os = require('os');
 const interfaces = os.networkInterfaces();
+
+const windowStateKeeper = require('electron-window-state');
+const ipcMain = electron.ipcMain;
+const dialog = electron.dialog;
 
 const bs = require('browser-sync').create();
 
@@ -12,109 +18,24 @@ const url = require('url');
 
 const Menu = electron.Menu;
 
-const template = [
-  {
-    label: 'Edit',
-    submenu: [
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      { role: 'selectall' },
-    ]
-  },
-  {
-    label: 'Window',
-    submenu: [
-      { role: 'minimize'},
-      { role: 'close'},
-    ]
-  },
-];
-
-if (process.platform === 'darwin') {
-  const name = app.getName()
-  template.unshift({
-    label: name,
-    submenu: [
-      {
-        role: 'about'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'services',
-        submenu: []
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'hide'
-      },
-      {
-        role: 'hideothers'
-      },
-      {
-        role: 'unhide'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'quit'
-      }
-    ]
-  })
-  // Edit menu.
-  template[1].submenu.push(
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Speech',
-      submenu: [
-        {
-          role: 'startspeaking'
-        },
-        {
-          role: 'stopspeaking'
-        }
-      ]
-    }
-  )
-  // Window menu.
-  template[2].submenu = [
-    {
-      label: 'Close',
-      accelerator: 'CmdOrCtrl+W',
-      role: 'close'
-    },
-    {
-      label: 'Minimize',
-      accelerator: 'CmdOrCtrl+M',
-      role: 'minimize'
-    },
-    {
-      label: 'Zoom',
-      role: 'zoom'
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Bring All to Front',
-      role: 'front'
-    }
-  ]
-}
-
+const template = [ { label: 'Edit', submenu: [ { role: 'cut' }, { role: 'copy' }, { role: 'paste' }, { role: 'selectall' }] }, { label: 'Window', submenu: [ { role: 'minimize'}, { role: 'close'}] }]; if (process.platform === 'darwin') { const name = app.getName(); template.unshift({ label: name, submenu: [ { role: 'about' }, { type: 'separator' }, { role: 'services', submenu: [] }, { type: 'separator' }, { role: 'hide' }, { role: 'hideothers' }, { role: 'unhide' }, { type: 'separator' }, { role: 'quit' } ] }); template[1].submenu.push( { type: 'separator' }, { label: 'Speech', submenu: [ { role: 'startspeaking' }, { role: 'stopspeaking' } ] } ); template[2].submenu = [ { label: 'Close', accelerator: 'CmdOrCtrl+W', role: 'close' }, { label: 'Minimize', accelerator: 'CmdOrCtrl+M', role: 'minimize' }, { type: 'separator' }, { label: 'Bring All to Front', role: 'front' } ]; }
 const menu = Menu.buildFromTemplate(template);
 
 let mainWindow;
 
-function createWindow () {
-  mainWindow = new BrowserWindow({ width: 400, height: 400, resizable: false, titleBarStyle: 'hiddenInset' });
+function createWindow() {
+  let mainWindowState = windowStateKeeper();
+
+  mainWindow = new BrowserWindow({
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: 400,
+    height: 420,
+    resizable: false,
+    maximizable: false,
+    vibrancy: 'light',
+    titleBarStyle: 'hiddenInset'
+  });
 
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
@@ -124,10 +45,39 @@ function createWindow () {
 
   mainWindow.on('closed', function () {
     mainWindow = null;
+    if (bs.active) { bs.exit(); }
+    app.quit();
   });
 
   Menu.setApplicationMenu(menu);
+  mainWindowState.manage(mainWindow);
 }
+
+/*function createChrome(url) {
+  let chromeWindowState = windowStateKeeper();
+
+  chromeWindow = new BrowserWindow({
+    x: chromeWindowState.x,
+    y: chromeWindowState.y,
+    width: 800,
+    height: 600,
+    resizable: true,
+    maximizable: true,
+    titleBarStyle: 'hiddenInset'
+  });
+
+  chromeWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'chrome.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+
+  chromeWindow.on('closed', function () {
+    chromeWindow = null;
+  });
+
+  chromeWindowState.manage(chromeWindow);
+}*/
 
 app.on('ready', createWindow);
 
@@ -145,9 +95,6 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-const ipcMain = electron.ipcMain;
-const dialog = electron.dialog;
-
 ipcMain.on('select-directory', function(event) {
   dialog.showOpenDialog(mainWindow, {
     properties: ['openDirectory']
@@ -159,11 +106,13 @@ ipcMain.on('select-directory', function(event) {
 ipcMain.on('server-start', function(event, options) {
   if (!bs.active && options.command == 'start') {
     bs.init({
-      proxy: options.url,
+      proxy: options.proxy,
+      server: options.server,
       browser: options.browser,
       files: options.files,
       logPrefix: '',
       port: 3000,
+      ui: { port: 3001 },
       reloadOnRestart: false,
       notify: false,
       open: 'local',
@@ -171,6 +120,7 @@ ipcMain.on('server-start', function(event, options) {
       ghostMode: false,
     }, function(err, bs) {
       event.sender.send('server-reply', 'started');
+      //createChrome('http://localhost:3000');
     });
   }
 });

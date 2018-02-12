@@ -24,7 +24,9 @@
     "electron-packager": "^11.0.0"
   },
   "dependencies": {
-    "browser-sync": "^2.23.6"
+    "browser-sync": "^2.23.6",
+    "electron-titlebar": "0.0.3",
+    "electron-window-state": "^4.1.1"
   },
   "web-preferences": {
     "web-security": false

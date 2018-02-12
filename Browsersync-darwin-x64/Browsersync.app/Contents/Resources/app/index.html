@@ -23,20 +23,18 @@
           </svg>
         </button>
       </div>
+      <div class="label">Watch file types</div>
+      <div class="input-field tags">
+        <input type="text" id="type" value="html,js,css">
+      </div>
       <div class="label">Proxy URL</div>
       <div class="input-field">
-        <input type="text" id="url" placeholder="http://website.com" value="">
-      </div>
-      <div class="label">Watch file extensions</div>
-      <div class="input-field">
-        <input type="text" id="type" placeholder="css, js, html" value="">
+        <input type="text" id="url" placeholder="https://website.dev" value="">
       </div>
       <button id="toggle"><span></span></button>
       <div id="ip"></div>
+
     </div>
-    <script>
-      // You can also require other files to run in this process
-      require('./build/scripts.js');
-    </script>
+    <script> require('./build/scripts.js'); </script>
   </body>
 </html>
