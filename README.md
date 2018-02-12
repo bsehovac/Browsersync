@@ -4,10 +4,10 @@ GUI for Browsersync
 
 ## Usage
 
-1. Select Project Path
-2. Choose which file types to watch (enter * for all)
-3. Set proxy (or leave empty to serve static project path)
-4. Start
+1. Select `project path`
+2. Choose which file types to watch (`*` to watch `all files`)
+3. Set proxy (leave empty to serve `project path` as `static server`)
+4. **Start**
 
 ## Screenshot
 
