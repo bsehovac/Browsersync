@@ -30,7 +30,7 @@ function createWindow() {
     x: mainWindowState.x,
     y: mainWindowState.y,
     width: 400,
-    height: 420,
+    height: 425,
     resizable: false,
     maximizable: false,
     vibrancy: 'light',

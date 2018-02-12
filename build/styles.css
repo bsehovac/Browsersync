@@ -76,11 +76,11 @@ body {
 #titlebar {
   -webkit-user-select: none;
   -webkit-app-region: drag;
-  height: 8rem;
+  height: 8.5rem;
   text-align: center; }
   #titlebar svg {
     height: 4.5rem;
-    margin-top: 3rem;
+    margin-top: 3.5rem;
     display: inline-block;
     vertical-align: top; }
 
@@ -134,7 +134,7 @@ body {
       width: 100%;
       height: 100%; }
       .input-field button svg * {
-        fill: rgba(255, 255, 255, 0.5);
+        fill: rgba(255, 255, 255, 0.6);
         transition: fill 350ms ease; }
     .input-field button:hover svg * {
       fill: #f24747; }
@@ -153,28 +153,28 @@ body {
     .input-field.tags span {
       display: block;
       vertical-align: middle;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.4);
       border-radius: 0.4rem;
-      padding: 0 0.6rem;
-      padding-right: 2rem;
+      padding: 0 0.9rem;
       line-height: 3rem;
       height: 3rem;
       margin-top: 0.75rem;
       margin-right: 0.5rem;
       width: auto;
-      transition: background 350ms ease, color 350ms ease; }
-      .input-field.tags span:hover {
-        background: #f24747;
-        color: #fff; }
-      .input-field.tags span:first-child {
-        margin-left: 0; }
-      .input-field.tags span:after {
+      transition: background 350ms ease, color 350ms ease, box-shadow 350ms ease;
+      /*&:after {
         content: 'X';
         font-size: 1rem;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        right: 0.75rem; }
+        right: 0.75rem;
+      }*/ }
+      .input-field.tags span:hover {
+        background: #f24747;
+        color: #fff; }
+      .input-field.tags span:first-child {
+        margin-left: 0; }
 
 input {
   display: block;
@@ -195,7 +195,7 @@ input {
     width: 2.88rem;
     border-radius: 2.88rem;
     background: #fff;
-    box-shadow: 0 0.48rem 1.44rem rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0.48rem 1.44rem rgba(0, 0, 0, 0.15);
     transition: left 350ms ease; }
   #toggle.active {
     background-color: #62d66a; }
@@ -205,5 +205,5 @@ input {
 body {
   transition: filter 350ms ease, opacity 350ms ease; }
   body.blur {
-    opacity: 0.5;
+    opacity: 0.6;
     filter: grayscale(1); }

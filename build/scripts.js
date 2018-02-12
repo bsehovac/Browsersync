@@ -108,6 +108,7 @@ ipcRenderer.on('return-directory', function(event, dirname) {
   if (!dirname) return;
   var path = dirname[0];
   pathInput.value = path;
+  localStorage.setItem('path', path);
 });
 
 getPath.onclick = function() {
@@ -149,7 +150,7 @@ each(tags, function(holder, i) {
   mainInput.style.display = 'none';
   document.body.appendChild(mainInput);
 
-  if (mainInput.value == '') mainInput.value = 'html,js,css';
+  if (mainInput.value == '') mainInput.value = 'css,png,jpg,svg';
   const current = mainInput.value.split(',');
   each(current, function(tag, i) {
     if (tag != '') addTag(tag);
@@ -163,11 +164,13 @@ each(tags, function(holder, i) {
       output += tag;
     });
     mainInput.value = output;
+    localStorage.setItem('extensions', typeInput.value);
   }
 
   function addTag(value) {
     const tag = document.createElement('span');
-    tag.innerHTML = value;
+    tag.innerHTML = value.toUpperCase();
+    tag.setAttribute('title', 'Remove');
     alltags.push(value);
     allspans.push(tag);
     holder.insertBefore(tag, input);
@@ -183,7 +186,7 @@ each(tags, function(holder, i) {
 
   input.onkeydown = function(e) {
     const key = e.keyCode;
-    if (key == 188) {
+    if (key == 188 || key == 13 || key == 9) {
       e.preventDefault();
       const value = input.value.trim().replace(',', '');
       input.value = '';
