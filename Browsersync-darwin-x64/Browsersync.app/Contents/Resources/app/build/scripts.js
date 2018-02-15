@@ -42,6 +42,7 @@ toggle.onclick = function() {
 };
 
 function startServer() {
+  typeInput.value = localStorage.getItem('extensions');
   let path  = pathInput.value.replace(/^\/|\/$/g, '');
   let proxyurl   = urlInput.value;
   let files = typeInput.value.split(',');

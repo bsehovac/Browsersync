@@ -104,6 +104,8 @@ ipcMain.on('select-directory', function(event) {
 });
 
 ipcMain.on('server-start', function(event, options) {
+  console.log(options.files);
+
   if (!bs.active && options.command == 'start') {
     bs.init({
       proxy: options.proxy,
@@ -118,6 +120,14 @@ ipcMain.on('server-start', function(event, options) {
       open: 'local',
       https: false,
       ghostMode: false,
+      socket: {
+        path: '/browser-sync/socket.io',
+        clientPath: '/browser-sync',
+        namespace: '/browser-sync',
+        clients: {
+          heartbeatTimeout: 500,
+        },
+      },
     }, function(err, bs) {
       event.sender.send('server-reply', 'started');
       //createChrome('http://localhost:3000');
